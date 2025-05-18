@@ -13,6 +13,12 @@ source .venv/bin/activate
 deactivate
 ```
 
+## Run
+
+```sh
+docker-compose run　-p 8000:8000 web uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+```
+
 ## db
 
 ```shell
