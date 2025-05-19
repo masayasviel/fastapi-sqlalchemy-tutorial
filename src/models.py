@@ -1,6 +1,9 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Text
-from sqlalchemy.orm import relationship, declarative_base
-from db import Base
+from sqlalchemy.orm import DeclarativeBase, relationship
+
+
+class Base(DeclarativeBase):
+    pass
 
 
 class User(Base):
@@ -11,6 +14,7 @@ class User(Base):
     code = Column(String(255), nullable=False, unique=True)
 
     posts = relationship("Post", back_populates="user")
+
 
 class Post(Base):
     __tablename__ = 'post'
