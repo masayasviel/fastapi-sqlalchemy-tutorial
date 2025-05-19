@@ -1,8 +1,9 @@
 import os
+from typing import Annotated, Generator
 
+from fastapi import Depends
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
 
 
 def create_db_url(
@@ -17,6 +18,7 @@ def create_db_url(
     charset: str = "utf8mb4",
 ) -> str:
     return f"{engine}://{user}:{password}@{host}:{port}/{db_name}?charset={charset}&init_command={init_command}"
+
 
 SQLALCHEMY_DATABASE_URL = create_db_url(
     engine='mysql',
@@ -33,4 +35,13 @@ engine = create_engine(
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-Base = declarative_base()
+
+def get_session() -> Generator[Session, None, None]:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+SessionDep = Annotated[Session, Depends(get_session)]
