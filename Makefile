@@ -9,4 +9,4 @@ down_volume:
 
 venv:
 	python3 -m venv .venv
-	grep -v 'mysql' requirements.txt | xargs -n 1 .venv/bin/pip install
+	cat ./requirements.txt | grep -v mysql | xargs ./.venv/bin/pip install
